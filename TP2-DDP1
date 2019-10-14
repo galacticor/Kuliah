@@ -1,0 +1,92 @@
+import string
+import numpy as np
+import matplotlib.pyplot as plt
+
+teks = []
+lst_kata = []
+lst_freq = []
+stopwords = []
+lst_final = []
+
+def input_stopwords():
+	File = open("TP2-stopword.txt", "r")
+	stopwords = []
+	for words in File:
+		stopwords.append(words.strip())
+	File.close()
+	return stopwords
+
+def input_data():
+	pesan = input('masukkan pesan: ')
+	teks = ''
+	while pesan!='':
+		teks = teks + ' ' + pesan.strip()
+		pesan = input('masukkan pesan: ')
+	teks = teks.split()
+	return teks
+
+def buang_tanda(teks):
+	ret_teks = []
+	kata_baru = ''
+	for kata in teks:
+		kata_baru = kata
+		for char in string.punctuation.replace("-",""):
+			kata_baru = kata_baru.replace(char,"")
+		ret_teks.append(kata_baru.lower())
+	return ret_teks
+
+def hitung_freq(teks):
+	for kata in teks:
+		if len(kata) > 0 and kata not in stopwords and kata != '-':
+			idx = -1
+			for i in range(len(lst_kata)):
+				if kata == lst_kata[i]:
+					idx = i
+					break
+			if idx == -1:
+				lst_kata.append(kata)
+				lst_freq.append(1)
+			else:
+				lst_freq[idx] += 1
+
+def print1():
+    	col_count_width = max(len(str(data[0])) for data in list_final) + 1
+	col_word_width = max(len(data[1]) for data in list_final) + 16
+	print()
+	print(f"{len(list_final)} words in frequency order as (count:word) pairs")
+	print()
+	for i in range(len(list_final)):
+		count = list_final[i][0]
+		word = list_final[i][1]
+		print(f"{count}".rjust(col_count_width), f"{word}".ljust(col_word_width), sep=":", end="")
+		if i%2 == 1:
+			print()
+	if (len(list_final)%2 == 1):
+		print()
+    
+stopwords = input_stopwords()
+teks = input_data()
+teks = buang_tanda(teks)
+hitung_freq(teks)
+
+for i in range(len(lst_kata)):
+    lst_final.append((lst_freq[i],lst_kata[i]))
+
+lst_final.sort(key = reversed)
+if lst_final>36:
+    lst_final = lst_final[:36]
+print1()
+
+baris = 1
+print('\nDistribusi Frekuensi Kata:{0}{2}{0}No  Kata{1}Frekuensi {0}{2}'.format("\n",' '*18,"-"*37))
+for output,amount in zip(lst_kata,lst_freq) :
+    print(f'{f"{baris}":>3} {f"{output}":<24}{f"{amount}"}')
+    baris +=1
+print("-"*37)
+
+lebar = 0.75
+banyakBar = np.arange(len(lst_kata))
+plt.barh(banyakBar, lst_freq,lebar)
+plt.yticks(banyakBar, lst_kata)
+
+plt.show()
