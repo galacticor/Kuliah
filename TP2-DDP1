@@ -16,12 +16,10 @@ def input_stopwords():
 	File.close()
 	return stopwords
 
-def input_data():
-	pesan = input('masukkan pesan: ')
+def input_data(file):
 	teks = ''
-	while pesan!='':
-		teks = teks + ' ' + pesan.strip()
-		pesan = input('masukkan pesan: ')
+	for baris in file:
+		teks = teks + ' ' + baris.strip()
 	teks = teks.split()
 	return teks
 
@@ -50,24 +48,30 @@ def hitung_freq(teks):
 				lst_freq[idx] += 1
 
 def print1():
-    	col_count_width = max(len(str(data[0])) for data in list_final) + 1
-	col_word_width = max(len(data[1]) for data in list_final) + 16
+    	lebar_freq = max(len(str(data[0])) for data in list_final) + 1
+	lebar_kata = max(len(data[1]) for data in list_final) + 16
 	print()
 	print(f"{len(list_final)} words in frequency order as (count:word) pairs")
 	print()
 	for i in range(len(list_final)):
 		count = list_final[i][0]
 		word = list_final[i][1]
-		print(f"{count}".rjust(col_count_width), f"{word}".ljust(col_word_width), sep=":", end="")
+		print(f"{count}".rjust(lebar_freq), f"{word}".ljust(lebar_kata), sep=":", end="")
 		if i%2 == 1:
 			print()
 	if (len(list_final)%2 == 1):
 		print()
     
+print("Create word frequency table and bar chart from a text file")
+print("----------------------------------------------------------")
+file_name = input("Please enter the file name: ")
+
+File = open(file_name,'r')
 stopwords = input_stopwords()
-teks = input_data()
+teks = input_data(File)
 teks = buang_tanda(teks)
 hitung_freq(teks)
+File.close()
 
 for i in range(len(lst_kata)):
     lst_final.append((lst_freq[i],lst_kata[i]))
@@ -76,13 +80,6 @@ lst_final.sort(key = reversed)
 if lst_final>36:
     lst_final = lst_final[:36]
 print1()
-
-baris = 1
-print('\nDistribusi Frekuensi Kata:{0}{2}{0}No  Kata{1}Frekuensi {0}{2}'.format("\n",' '*18,"-"*37))
-for output,amount in zip(lst_kata,lst_freq) :
-    print(f'{f"{baris}":>3} {f"{output}":<24}{f"{amount}"}')
-    baris +=1
-print("-"*37)
 
 lebar = 0.75
 banyakBar = np.arange(len(lst_kata))
