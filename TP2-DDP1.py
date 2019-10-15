@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Oct 15 11:37:05 2019
+
+@author: Irham Trisna
+"""
+
 import string
 import numpy as np
 import matplotlib.pyplot as plt
@@ -9,7 +16,7 @@ stopwords = []
 lst_final = []
 
 def input_stopwords():
-	File = open("TP2-stopword.txt", "r")
+	File = open("stopWords.txt", "r")
 	stopwords = []
 	for words in File:
 		stopwords.append(words.strip())
@@ -28,14 +35,14 @@ def buang_tanda(teks):
 	kata_baru = ''
 	for kata in teks:
 		kata_baru = kata
-		for char in string.punctuation.replace("-",""):
+		for char in string.punctuation:
 			kata_baru = kata_baru.replace(char,"")
 		ret_teks.append(kata_baru.lower())
 	return ret_teks
 
 def hitung_freq(teks):
 	for kata in teks:
-		if len(kata) > 0 and kata not in stopwords and kata != '-':
+		if len(kata) > 0 and kata not in stopwords:
 			idx = -1
 			for i in range(len(lst_kata)):
 				if kata == lst_kata[i]:
@@ -48,19 +55,19 @@ def hitung_freq(teks):
 				lst_freq[idx] += 1
 
 def print1():
-    	lebar_freq = max(len(str(data[0])) for data in list_final) + 1
-	lebar_kata = max(len(data[1]) for data in list_final) + 16
-	print()
-	print(f"{len(list_final)} words in frequency order as (count:word) pairs")
-	print()
-	for i in range(len(list_final)):
-		count = list_final[i][0]
-		word = list_final[i][1]
-		print(f"{count}".rjust(lebar_freq), f"{word}".ljust(lebar_kata), sep=":", end="")
-		if i%2 == 1:
-			print()
-	if (len(list_final)%2 == 1):
-		print()
+        lebar_freq = max(len(str(data[0])) for data in lst_final) + 1
+        lebar_kata = max(len(data[1]) for data in lst_final) + 16
+        print()
+        print(f"{len(lst_final)} words in frequency order as (count:word) pairs")
+        print()
+        for i in range(len(lst_final)):
+                count = lst_final[i][0]
+                word = lst_final[i][1]
+                print(f"{count}".rjust(lebar_freq), f"{word}".ljust(lebar_kata), sep=":", end="")
+                if i%2 == 1:
+                        print()
+        if (len(lst_final)%2 == 1):
+                print()
     
 print("Create word frequency table and bar chart from a text file")
 print("----------------------------------------------------------")
@@ -76,8 +83,8 @@ File.close()
 for i in range(len(lst_kata)):
     lst_final.append((lst_freq[i],lst_kata[i]))
 
-lst_final.sort(key = reversed)
-if lst_final>36:
+lst_final.sort(reverse = True)
+if len(lst_final)>36:
     lst_final = lst_final[:36]
 print1()
 
