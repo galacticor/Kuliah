@@ -24,19 +24,25 @@ def oke(height_pascal):
 		print(lst)
 	print("]")
 	print("\nPascal's triangle of height", height_pascal,":")
+	wid = len(str_final[-1])
 	for i in range(height_pascal):
-		print(' '*(height_pascal-i-1),str_final[i],' '*(height_pascal-i-1))
+		print(str_final[i].center(wid))
 	
-
-end = False
-while not end:
-	height_pascal = input("Enter the height of Pascal's triangle in decimal (> 2): ")
-	try :
-		height_pascal = int(height_pascal)
-		if height_pascal <=2 :
+def main():
+	end = False
+	while not end:
+		height_pascal = input("Enter the height of Pascal's triangle in decimal (> 2): ")
+		try :
+			height_pascal = int(height_pascal)
+			if height_pascal <=2 :
+				print("Invalid input")
+			else:
+				end = True
+				oke(height_pascal)
+		except ValueError:
 			print("Invalid input")
-		else:
-			end = True
-			oke(height_pascal)
-	except ValueError:
-		print("Invalid input")
+
+	x = input("Press Enter to Exit")
+
+if __name__ == '__main__':
+	main()
