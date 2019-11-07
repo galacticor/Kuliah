@@ -9,7 +9,6 @@ def recrev(st):
 	st = st[:-1]
 	return a+recrev(st)
 
-@app.route("/")
 @app.route("/<word>")
 def main(word='fasilkom'):
 	page = '''
