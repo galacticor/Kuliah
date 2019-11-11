@@ -8,7 +8,7 @@ def impor(query):
 	count = 0;
 	query = query.split()
 	for baris in file:
-		semua[query[0]] = query[1:]
+		semua[query[0]] = query[:]
 		count += 1
 	print("Terimpor {} baris".format(count))
 
@@ -21,29 +21,71 @@ def cari_nama(query):
 	print(tmp[0],tmp[1],tmp[2],tmp[3], sep = ',')
 
 def cari_tipe(query):
+	query = query.replace('CARITIPE ','').strip()
 	count = 0
 	for data in semua:
-		if semua[data][1] == tipe:
+		if semua[data][1] == query:
 			count += 1
 			tmp = semua[data]
 			print(tmp[0],tmp[1],tmp[2],tmp[3], sep = ',')
-	print("*Ditemukan")
+	print("*Ditemukan {} {}*".format(count,query))
 
 def cari_prov(query):
+	query = query.replace('CARIPROV ','').strip()
+	count = 0
+	for data in semua:
+		if semua[data][2] == query:
+			count += 1
+			tmp = semua[data]
+			print(tmp[0],tmp[1],tmp[2],tmp[3], sep = ',')
+	print("*Ditemukan {} {}*".format(count,query))\
+
+def tambah(query):
+	query = query.replace('TAMBAH ','').strip()
+	query = query.split(',,,')
+	if query[0] in semua:
+		print('Data telah ada')
+	else:
+		semua[query[0]] = query[:]
+
+def update(query):
+	query = query.replace('UPDATE ','').strip()
+	query = query.split(',,,')
+	semua[query[0]] = query[:]
+
+ def hapus(query):
+ 	query = query.replace('HAPUS ','').strip()
+ 	try:
+ 		del semua[query]
+ 		print("{} dihapus".format(query))
+ 	except:
+ 		print("{} memang tidak ada".format(query))
+
+ def stat():
+ 	print("Terdapat {} warisan budaya".format(len(semua)))
+
+ def stat_tipe():
+ 	for data in semua:
+ 		semua[data]
 
 
-def main():
+
+def main(): 
 	while(True):
 		query = input().strip()
 		if 'IMPOR' in query:
-			impor()
+			impor(query)
 		elif 'EKSPOR' in query:
-			ekspor()
+			ekspor(query)
 		elif 'CARINAMA' in query:
-			carinama()
-		elif 'EKSPOR' in query:
-			ekspor()
-		elif 'EKSPOR' in query:
-			ekspor()
-		elif 'EKSPOR' in query:
-			ekspor()
+			cari_nama(query)
+		elif 'CARITIPE' in query:
+			cari_tipe(query)
+		elif 'CARIPROV' in query:
+			cari_prov(query)
+		elif 'TAMBAH' in query:
+			tambah(query)
+		elif 'UPDATE' in query:
+			update(query)
+		elif 'HAPUS' in query:
+			hapus(query)
