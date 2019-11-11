@@ -1,24 +1,25 @@
-import csv
-
 semua = {}
 
 def impor(query):
 	query = query.replace('IMPOR ','').strip()
 	file = open(query,'r')
 	count = 0;
-	query = query.split()
 	for baris in file:
-		semua[query[0]] = query[:]
+		baris = baris[1:-2]
+		tmp = baris.split(',')
+		semua[tmp[0]] = tmp[:]
 		count += 1
 	print("Terimpor {} baris".format(count))
+	print(semua)
 
 def ekspor(query):
 	query = query.replace('EKSPOR ','').strip()
+	######
 
 def cari_nama(query):
 	query = query.replace('CARINAMA ','').strip()
 	tmp = semua[query]
-	print(tmp[0],tmp[1],tmp[2],tmp[3], sep = ',')
+	print("{}, {}, {}, {}".format(tmp[0],tmp[1],tmp[2],tmp[3]))
 
 def cari_tipe(query):
 	query = query.replace('CARITIPE ','').strip()
@@ -27,7 +28,7 @@ def cari_tipe(query):
 		if semua[data][1] == query:
 			count += 1
 			tmp = semua[data]
-			print(tmp[0],tmp[1],tmp[2],tmp[3], sep = ',')
+			print("{}, {}, {}, {}".format(tmp[0],tmp[1],tmp[2],tmp[3]))
 	print("*Ditemukan {} {}*".format(count,query))
 
 def cari_prov(query):
@@ -37,11 +38,12 @@ def cari_prov(query):
 		if semua[data][2] == query:
 			count += 1
 			tmp = semua[data]
-			print(tmp[0],tmp[1],tmp[2],tmp[3], sep = ',')
-	print("*Ditemukan {} {}*".format(count,query))\
+			print("{}, {}, {}, {}".format(tmp[0],tmp[1],tmp[2],tmp[3]))
+	print("*Ditemukan {} warisan budaya*".format(count,query))
 
 def tambah(query):
 	query = query.replace('TAMBAH ','').strip()
+	query = query[1:]
 	query = query.split(',,,')
 	if query[0] in semua:
 		print('Data telah ada')
@@ -49,22 +51,24 @@ def tambah(query):
 		semua[query[0]] = query[:]
 
 def update(query):
-	query = query.replace('UPDATE ','').strip()
+	query = query.replace('UPDATE ','')
+	query = query[1:]
 	query = query.split(',,,')
 	semua[query[0]] = query[:]
 
- def hapus(query):
+def hapus(query):
  	query = query.replace('HAPUS ','').strip()
+ 	query = query[1:]
  	try:
  		del semua[query]
  		print("{} dihapus".format(query))
  	except:
  		print("{} memang tidak ada".format(query))
 
- def stat():
+def stat():
  	print("Terdapat {} warisan budaya".format(len(semua)))
 
- def stat_tipe():
+def stat_tipe():
  	for data in semua:
  		semua[data]
 
@@ -89,3 +93,6 @@ def main():
 			update(query)
 		elif 'HAPUS' in query:
 			hapus(query)
+
+if __name__ == "__main__":
+        main()
