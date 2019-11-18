@@ -6,21 +6,35 @@ def impor(query):
 		file = open(query,'r')
 		count = 0;
 		for baris in file:
-			baris = baris[1:-1]
-			tmp = baris.split(',')
+			tmp = baris.strip().split(',')
 			semua[tmp[0]] = tmp[:]
 			count += 1
 		print("Terimpor {} baris".format(count))
 	except:
-		print('File tidak ada')
+		print('{} File tidak ada'.format(query))
 	
 def ekspor(query):
-	query = query.replace('EKSPOR ','').strip()
-	######
+	query = query.replace('EKSPOR','').strip()
+	try:
+		file = open(query,'w+')
+		count = 0
+		for data in semua:
+			tmp = semua[data]
+			file.write("{},{},{},{}".format(tmp[0],tmp[1],tmp[2],tmp[3]))
+			file.write('\n')
+			count += 1
+		file.close()
+		print('Terekspor {} baris'.format(count))
+	except:
+		print('File tidak ada'.format(query))
 
 def cari_nama(query):
-	query = query.replace('CARINAMA ','').strip()
-	if query in semua:
+	query = query.replace('CARINAMA','').strip()
+	if query == '*':
+		for data in semua:
+			tmp = semua[data]
+			print("{}, {}, {}, {}".format(tmp[0],tmp[1],tmp[2],tmp[3]))	
+	elif query in semua:
 		tmp = semua[query]
 		print("{}, {}, {}, {}".format(tmp[0],tmp[1],tmp[2],tmp[3]))
 	else: print("{} tidak ditemukan".format(query))
@@ -50,18 +64,24 @@ def cari_prov(query):
 def tambah(query):
 	query = query.replace('TAMBAH ','').strip()
 	query = query.split(';;;')
-	if query[0] in semua:
+	if len(query) < 4:
+		print('Masukkan format TAMBAH yang benar')
+	elif query[0] in semua:
 		print('{} telah ada'.format(query[0]))
 	else:
 		semua[query[0]] = query[:]
+		print ('{} ditambahkan'.format(query[0]))
 
 def update(query):
 	query = query.replace('UPDATE ','')
 	query = query.split(';;;')
-	if query[0] not in semua:
+	if len(query) < 4:
+		print('Masukkan format UPDATE yang benar')
+	elif query[0] not in semua:
 		print('{} belum ada'.format(query[0]))
 	else:
 		semua[query[0]] = query[:]
+		print ('{} diupdate'.format(query[0]))
 
 def hapus(query):
  	query = query.replace('HAPUS ','').strip()
@@ -112,9 +132,13 @@ def main():
 		elif 'HAPUS' in query: hapus(query)
 		elif 'STATTIPE' in query: stat_tipe()
 		elif 'STATPROV' in query: stat_prov()
-		elif 'STAT' in query: stat()
-		elif 'cetak' in query:
-			print (semua)
+		elif 'STAT' == query: stat()
+		elif 'cetak' in query: print (semua)
+		elif 'KELUAR' in query: 
+			print('~Sampai jumpa, jangan lupa mencintai warisan budaya Indonesia!~')
+			break
+		else:
+			print('Masukkan perintah yang benar ')
 
 if __name__ == "__main__":
 	print("#"*5)
