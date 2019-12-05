@@ -1,0 +1,39 @@
+<html>
+<head>
+	<title>BudayaKB Lite</title>
+</head>
+
+<body>
+	 {% include 'includes/_navbar.html' %}
+	<h2><b>Kriteria Pencarian Statistik Data Budaya</b></h2>
+
+	<form method="POST", action="" enctype = "multipart/form-data">
+		<p>Kriteria Pencarian Statistik Data Budaya</p>
+		<select name ="pilihan">
+			<option value = 'All'>All</option>
+			<option value = 'Tipe'>Tipe Budaya</option>
+			<option value = 'Prov'>Asal Provinsi Budaya</option>
+		</select>
+		<input type=submit value="Cari">
+	</form>
+	
+	{% if result is defined and pilihan == 'All'%}
+    <h4>Budaya KB memiliki total {{result}} data Budaya</h4>
+	{% elif result is defined and result|length!= 0%}
+	<h4>Statistik Data Budaya Berdasarkan {{st}} Budaya</h4>
+	<table border=1>
+        <tr>
+        	<th>Kriteria</th>
+            <th>Jumlah</th>
+        </tr>
+        {% for v in result %}
+        <tr>
+			<td align=center> {{ v }} </td>
+            <td align=center> {{ result[v] }} </td>
+        </tr>
+        {% endfor %}
+    </table>
+	{% endif %}
+
+</body>
+</html>
